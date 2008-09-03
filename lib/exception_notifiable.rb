@@ -85,15 +85,17 @@ module ExceptionNotifiable
         else          
           render_500
 
-          deliverer = self.class.exception_data
-          data = case deliverer
-            when nil then {}
-            when Symbol then send(deliverer)
-            when Proc then deliverer.call(self)
-          end
+          unless ExceptionNotifier.skip_notification_filter && ExceptionNotifier.skip_notification_filter.call(request)
+            deliverer = self.class.exception_data
+            data = case deliverer
+              when nil then {}
+              when Symbol then send(deliverer)
+              when Proc then deliverer.call(self)
+            end
 
-          ExceptionNotifier.deliver_exception_notification(exception, self,
-            request, data)
+            ExceptionNotifier.deliver_exception_notification(exception, self,
+              request, data)
+          end
       end
     end
 end

@@ -33,6 +33,9 @@ class ExceptionNotifier < ActionMailer::Base
   @@sections = %w(request session environment backtrace)
   cattr_accessor :sections
 
+  @@skip_notification_filter = nil
+  cattr_accessor :skip_notification_filter
+
   self.template_root = "#{File.dirname(__FILE__)}/../views"
 
   def self.reloadable?() false end

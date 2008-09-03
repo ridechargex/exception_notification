@@ -39,6 +39,13 @@ just set any or all of the following values:
   # defaults to "[ERROR] "
   ExceptionNotifier.email_prefix = "[APP] "
 
+You can prevent the email notification from being sent with a filter method.
+
+  # don't send notifications for requests from Mozilla browsers
+  ExceptionNotifier.skip_notification_filter = lambda do |request|
+    request.headers["HTTP_USER_AGENT"] =~ /Mozilla/i
+  end
+
 Email notifications will only occur when the IP address is determined not to
 be local. You can specify certain addresses to always be local so that you'll
 get a detailed error instead of the generic error page. You do this in your
